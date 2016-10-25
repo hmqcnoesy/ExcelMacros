@@ -34,7 +34,40 @@ This will use Beyond Compare (assuming install at `c:\apps\Beyond Compare 4\BCom
 
 ```vba
 Public Sub CompareWorksheets()
-  Dim ws As Worksheet    Dim path As String    Dim path1 As String    Dim path2 As String    Dim sh As Variant        If ActiveWorkbook.Sheets.Count < 2 Then        MsgBox "Active workbook doesn't have 2 sheets."        Exit Sub    End If        path = "C:\temp"        Set ws = ActiveWorkbook.Sheets(1)    path1 = path & "\" & ws.Name & ".xlsx"    ws.Copy    Application.DisplayAlerts = False    With ActiveWorkbook        .SaveAs Filename:=path1, FileFormat:=xlOpenXMLWorkbook        .Close SaveChanges:=False    End With        Set ws = ActiveWorkbook.Sheets(2)    path2 = path & "\" & ws.Name & ".xlsx"    ws.Copy    With ActiveWorkbook        .SaveAs Filename:=path2, FileFormat:=xlOpenXMLWorkbook        .Close SaveChanges:=False    End With    Application.DisplayAlerts = True        sh = Shell("""C:\apps\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """", vbNormalFocus)    End Sub
+    Dim ws As Worksheet
+    Dim path As String
+    Dim path1 As String
+    Dim path2 As String
+    Dim sh As Variant
+    
+    If ActiveWorkbook.Sheets.Count < 2 Then
+        MsgBox "Active workbook doesn't have 2 sheets."
+        Exit Sub
+    End If
+    
+    path = "C:\temp"
+    
+    Set ws = ActiveWorkbook.Sheets(1)
+    path1 = path & "\" & ws.Name & ".xlsx"
+    ws.Copy
+    Application.DisplayAlerts = False
+    With ActiveWorkbook
+        .SaveAs Filename:=path1, FileFormat:=xlOpenXMLWorkbook
+        .Close SaveChanges:=False
+    End With
+    
+    Set ws = ActiveWorkbook.Sheets(2)
+    path2 = path & "\" & ws.Name & ".xlsx"
+    ws.Copy
+    With ActiveWorkbook
+        .SaveAs Filename:=path2, FileFormat:=xlOpenXMLWorkbook
+        .Close SaveChanges:=False
+    End With
+    Application.DisplayAlerts = True
+    
+    sh = Shell("""C:\apps\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """", vbNormalFocus)
+    
+End Sub
 ```
 
 
@@ -42,5 +75,54 @@ Public Sub CompareWorksheets()
 Summarizes timecard in my own personal format
 
 ```vba
-Sub SummarizeTimecard()    Dim dates As Scripting.Dictionary    Dim pos As Scripting.Dictionary    Dim dateKey As Variant    Dim poKey As Variant    Dim row As Integer    Dim message As String            row = 3    Set dates = New Scripting.Dictionary        Do Until Cells(row, 2).Value = ""        If ActiveSheet.Cells(row, 7) <> "" Then            If ActiveSheet.Cells(row, 5) <> "" Then                poKey = ActiveSheet.Cells(row, 5).Value            Else                poKey = ActiveSheet.Cells(row, 3).Value            End If                            If ActiveSheet.Cells(row, 1).Value <> "" Then                Set pos = New Scripting.Dictionary                pos.Add poKey, ActiveSheet.Cells(row, 7)                dates.Add ActiveSheet.Cells(row, 1).Value, pos                lastDate = ActiveSheet.Cells(row, 1).Value            Else                If dates(lastDate).Exists(poKey) Then                    dates(lastDate)(poKey) = dates(lastDate)(poKey) + ActiveSheet.Cells(row, 7)                Else                    Set pos = New Scripting.Dictionary                    dates(lastDate).Add poKey, ActiveSheet.Cells(row, 7)                End If            End If                End If        row = row + 1            Loop        For Each dateKey In dates.Keys        message = message & dateKey & Chr(13) & Chr(10)        For Each poKey In dates(dateKey)            message = message & Chr(9) & poKey & " :  " & Round(dates(dateKey)(poKey), 2) & Chr(13) & Chr(10)        Next    Next        MsgBox message        Set dates = Nothing    Set pos = NothingEnd Sub
+Sub SummarizeTimecard()
+    Dim dates As Scripting.Dictionary
+    Dim pos As Scripting.Dictionary
+    Dim dateKey As Variant
+    Dim poKey As Variant
+    Dim row As Integer
+    Dim message As String
+        
+    row = 3
+    Set dates = New Scripting.Dictionary
+    
+    Do Until Cells(row, 2).Value = ""
+        If ActiveSheet.Cells(row, 7) <> "" Then
+            If ActiveSheet.Cells(row, 5) <> "" Then
+                poKey = ActiveSheet.Cells(row, 5).Value
+            Else
+                poKey = ActiveSheet.Cells(row, 3).Value
+            End If
+                
+            If ActiveSheet.Cells(row, 1).Value <> "" Then
+                Set pos = New Scripting.Dictionary
+                pos.Add poKey, ActiveSheet.Cells(row, 7)
+                dates.Add ActiveSheet.Cells(row, 1).Value, pos
+                lastDate = ActiveSheet.Cells(row, 1).Value
+            Else
+                If dates(lastDate).Exists(poKey) Then
+                    dates(lastDate)(poKey) = dates(lastDate)(poKey) + ActiveSheet.Cells(row, 7)
+                Else
+                    Set pos = New Scripting.Dictionary
+                    dates(lastDate).Add poKey, ActiveSheet.Cells(row, 7)
+                End If
+            End If
+        
+        End If
+        row = row + 1
+        
+    Loop
+    
+    For Each dateKey In dates.Keys
+        message = message & dateKey & Chr(13) & Chr(10)
+        For Each poKey In dates(dateKey)
+            message = message & Chr(9) & poKey & " :  " & Round(dates(dateKey)(poKey), 2) & Chr(13) & Chr(10)
+        Next
+    Next
+    
+    MsgBox message
+    
+    Set dates = Nothing
+    Set pos = Nothing
+End Sub
 ```
