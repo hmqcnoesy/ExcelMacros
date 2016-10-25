@@ -65,7 +65,7 @@ Public Sub CompareWorksheets()
     End With
     Application.DisplayAlerts = True
     
-    sh = Shell("""C:\apps\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """", vbNormalFocus)
+    sh = Shell("""C:\apps\Beyond Compare 4\BCompare.exe"" """ &path1& """ """ &path2& """",vbNormalFocus)
     
 End Sub
 ```
