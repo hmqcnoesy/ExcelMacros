@@ -30,7 +30,7 @@ End Sub
 
 
 ## Compare Worksheets
-This will use Beyond Compare (assuming install at `c:\apps\Beyond Compare 4\BCompare.exe`) to compare sheets 1 and 2 of the active workbook.
+This will use Beyond Compare (assuming install at `C:\Program Files\Beyond Compare 4\BCompare.exe`) to compare sheets 1 and 2 of the active workbook.
 
 ```vba
 Public Sub CompareWorksheets()
@@ -65,7 +65,7 @@ Public Sub CompareWorksheets()
     End With
     Application.DisplayAlerts = True
     
-    sh = Shell("""C:\apps\Beyond Compare 4\BCompare.exe"" """ &path1& """ """ &path2& """",vbNormalFocus)
+    sh = Shell("""C:\Program Files\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """",vbNormalFocus)
     
 End Sub
 ```
