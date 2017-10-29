@@ -30,7 +30,7 @@ End Sub
 
 
 ## Compare Worksheets
-This will use Beyond Compare (assuming install at `C:\Program Files\Beyond Compare 4\BCompare.exe`) to compare sheets 1 and 2 of the active workbook.
+This will use Beyond Compare (assuming install at `C:\Program Files\Beyond Compare 4\BCompare.exe`) to compare sheets 1 and 2 of the active workbook.  Make sure the temp file location specified in the bottom of the code already exists.
 
 ```vba
 Public Sub CompareWorksheets()
@@ -72,7 +72,8 @@ End Sub
 
 
 ## Summarize Timecard
-Summarizes timecard in my own personal format
+Summarizes timecard in my own personal format.
+Add reference to `Microsoft.Scripting.Runtime`.
 
 ```vba
 Sub SummarizeTimecard()
