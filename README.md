@@ -35,19 +35,23 @@ This will use Beyond Compare (assuming install at `C:\Program Files\Beyond Compa
 ```vba
 Public Sub CompareWorksheets()
     Dim ws As Worksheet
+    Dim index As Integer
     Dim path As String
     Dim path1 As String
     Dim path2 As String
     Dim sh As Variant
     
-    If ActiveWorkbook.Sheets.Count < 2 Then
-        MsgBox "Active workbook doesn't have 2 sheets."
+    Set ws = ActiveSheet
+    index = ws.index
+    
+    If ActiveWorkbook.Sheets.Count < (index + 1) Then
+        MsgBox "Active workbook doesn't have sheet after selected sheet."
         Exit Sub
     End If
-    
+        
     path = "C:\temp"
     
-    Set ws = ActiveWorkbook.Sheets(1)
+    Set ws = ActiveWorkbook.Sheets(index)
     path1 = path & "\" & ws.Name & ".xlsx"
     ws.Copy
     Application.DisplayAlerts = False
@@ -56,7 +60,7 @@ Public Sub CompareWorksheets()
         .Close SaveChanges:=False
     End With
     
-    Set ws = ActiveWorkbook.Sheets(2)
+    Set ws = ActiveWorkbook.Sheets(index + 1)
     path2 = path & "\" & ws.Name & ".xlsx"
     ws.Copy
     With ActiveWorkbook
@@ -65,7 +69,7 @@ Public Sub CompareWorksheets()
     End With
     Application.DisplayAlerts = True
     
-    sh = Shell("""C:\Program Files\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """",vbNormalFocus)
+    sh = Shell("""C:\apps\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """", vbNormalFocus)
     
 End Sub
 ```
