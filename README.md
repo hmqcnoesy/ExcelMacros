@@ -61,7 +61,7 @@ Public Sub CompareWorksheets()
     End With
     
     Set ws = ActiveWorkbook.Sheets(index + 1)
-    path2 = path & "\" & ws.Name & ".xlsx"
+   path2 = path & "\" & ws.Name & ".xlsx"
     ws.Copy
     With ActiveWorkbook
         .SaveAs Filename:=path2, FileFormat:=xlOpenXMLWorkbook
@@ -69,7 +69,47 @@ Public Sub CompareWorksheets()
     End With
     Application.DisplayAlerts = True
     
-    sh = Shell("""C:\apps\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """", vbNormalFocus)
+    sh = Shell("""C:\Program Files\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """", vbNormalFocus)
+    
+End Sub
+
+Public Sub CompareWorksheetsAsText()
+    Dim ws As Worksheet
+    Dim index As Integer
+    Dim path As String
+    Dim path1 As String
+    Dim path2 As String
+    Dim sh As Variant
+    
+    Set ws = ActiveSheet
+    index = ws.index
+    
+    If ActiveWorkbook.Sheets.Count < (index + 1) Then
+        MsgBox "Active workbook doesn't have sheet after selected sheet."
+        Exit Sub
+    End If
+        
+    path = "C:\temp"
+    
+    Set ws = ActiveWorkbook.Sheets(index)
+    path1 = path & "\" & ws.Name & ".txt"
+    ws.Copy
+    Application.DisplayAlerts = False
+    With ActiveWorkbook
+        .SaveAs Filename:=path1, FileFormat:=xlText
+        .Close SaveChanges:=False
+    End With
+    
+    Set ws = ActiveWorkbook.Sheets(index + 1)
+    path2 = path & "\" & ws.Name & ".txt"
+    ws.Copy
+    With ActiveWorkbook
+        .SaveAs Filename:=path2, FileFormat:=xlText
+        .Close SaveChanges:=False
+    End With
+    Application.DisplayAlerts = True
+    
+    sh = Shell("""C:\Program Files\Beyond Compare 4\BCompare.exe"" """ & path1 & """ """ & path2 & """", vbNormalFocus)
     
 End Sub
 ```
